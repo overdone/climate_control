@@ -1,0 +1,11 @@
+WIFI_SID = ''
+WIFI_PASS = ''
+
+AP_NAME = 'BRAINY'
+
+TELEGRAM_API_PROTO = 'https'
+TELEGRAM_API_HOST = 'api.telegram.org'
+TELEGRAM_API_PORT = 443
+BOT_TOKEN = ''
+
+AIR_PIN = 2
