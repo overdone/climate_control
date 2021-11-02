@@ -16,7 +16,7 @@ def nested_get(dic, path, default):
     return next_level
 
 
-class BrainyHomeBot:
+class ClimateControlBot:
     def __init__(self, token, proto, host, port):
         self._bot_url = '/bot{token}'.format(token=token)
         self._offset = 0
@@ -28,7 +28,7 @@ class BrainyHomeBot:
         })
 
     def handle_command(self, command):
-        # TODO: We sent all commend to first device now
+        # TODO: Now we have only one device
         device = self._devices[1]
         if device:
             return device.handle_command(command)
