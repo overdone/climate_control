@@ -1,7 +1,7 @@
 import json
 from net.http_client import HttpClient
 from device.air import AirCond
-from settings import AIR_PIN
+from settings import AIR_PIN, DHT_PIN
 
 GET_UPDATE_TIMEOUT = 30
 GET_UPDATES_LIMIT = 5
@@ -24,7 +24,8 @@ class ClimateControlBot:
         self._stopped = False
 
         self._devices = dict({
-            1: AirCond(AIR_PIN)
+            1: AirCond(AIR_PIN),
+            # 2: THSensor(DHT_PIN)
         })
 
     def handle_command(self, command):

@@ -1,7 +1,7 @@
 from machine import Pin
 from esp32 import RMT
 
-from base import BaseDevice
+from device.base import BaseDevice
 from utils import str_rjust, str_reverse
 
 ON_PULSE = (428, 1280)  # ON ms, OFF ms
@@ -22,7 +22,7 @@ AC_MODE = [
     {'name': 'AUTO', 'value': 0},
     {'name': 'DRY', 'value': 2},
     {'name': 'COOL', 'value': 3},
-    {'name': 'HEAT', 'value': 4},
+    # {'name': 'HEAT', 'value': 4}, # Do not work
     {'name': 'FAN', 'value': 6},
 ]
 
@@ -63,7 +63,6 @@ class AirCond(BaseDevice):
         self._powerful = False
         self._timer = None
         self._timer_duration = 0
-        self._frames = []
 
     def __str__(self):
         power_state = 'Вкл.' if self._power else 'Выкл.'
@@ -97,15 +96,11 @@ class AirCond(BaseDevice):
         frame = [0x11, 0xda, 0x27, 0x00, 0xc5, 0x00, 0x10 if self._comfort else 0x00]
         frame.append(get_checksum(frame))
 
-        self._frames = frame
-
         return frame
 
     def build_frame_2(self):
         frame = [0x11, 0xda, 0x27, 0x00, 0x42, 0x00, 0x00]
         frame.append(get_checksum(frame))
-
-        self._frames.extend(frame)
 
         return frame
 
@@ -170,8 +165,6 @@ class AirCond(BaseDevice):
 
         frame[18] = get_checksum(frame)
 
-        self._frames = frame
-
         return frame
 
     def transmit(self):
@@ -209,7 +202,7 @@ class AirCond(BaseDevice):
             if self._ac_mode == len(AC_MODE) - 1:
                 self._ac_mode = 0
             else:
-                self._ac_mode = self._ac_mode + 1
+                self._ac_mode += 1
         elif command == 'fan':
             if self._fan_mode == 0:
                 if self._fanSpeed < 5:
